@@ -1,6 +1,4 @@
-import copy
 import os
-import sys
 
 import numpy as np
 import networkx as nx
@@ -70,6 +68,7 @@ def my_greedy_communities_detection(G, no_of_communities=2):
     :param G: graful - networkx graph
     :param no_of_communities: numar de comunitati in care dorim sa impartim graful - int
     :return: o lista cu partitiile ale grafului reprezentand comunitatile cerute - list[dict]
+    O(n^3) sau O(m^2*n) complexitate
     """
 
     while len(list(nx.connected_components(G))) < no_of_communities:
@@ -95,12 +94,19 @@ def start_app():
     print("DONE")
 
     communities_of_node = [0 for _ in range(network.number_of_nodes())]
+
+    if file_name == 'karate': # karate starting at 1
+        communities_of_node += [0]
+
     for index, comm in enumerate(comms):
         comm = sorted(comm)
         for node in comm:
             communities_of_node[node] = index
         print(comm)
     print(communities_of_node)
+
+    if file_name == 'karate':
+        del communities_of_node[0]
 
     plot_network(network, communities_of_node)
 
